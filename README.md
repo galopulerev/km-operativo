@@ -1,4 +1,4 @@
-# mean-map-distance
-Repository for the mean-map-distance web app
+# km-operativo
+Repository for the km-operativo web app
 
 Authors: Galo Pule, Darwin Rosero.
