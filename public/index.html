@@ -1,0 +1,56 @@
+<!doctype html>
+<!-- Declares meanMapApp as the starting Angular module -->
+<html class="no-js" ng-app="meanMapApp">
+<head>
+    <meta charset="utf-8">
+    <title>Kilometraje recorrido</title>
+    <meta name="description" content="Don't waste your time living someone else' life">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSS -->
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="style.css"/>
+    <!-- Holder JS -->
+    <!--script src="../bower_components/holderjs/holder.js"></script-->
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAd--D35Uh61GjyJLL9r7rtwzmpe7sAJx0"></script>
+    <!-- Modernizr -->
+    <!--script src="../bower_components/modernizr/bin/modernizr"></script-->
+    <!-- JS Source -->
+    <script src="../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angularjs-geolocation/dist/angularjs-geolocation.min.js"></script>
+    <script src="../bower_components/angularUtils-pagination/dirPagination.js"></script>
+    <!-- Angular Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/addCtrl.js"></script>
+    <script src="js/gservice.js"></script>
+    <script src="js/queryCtrl.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <ul class="nav nav-pills pull-right">
+            <li active><a href="/#/join">Unete al equipo</a></li>
+            <li disabled><a href="/#/find">Encuentra a un amigo</a></li>
+        </ul>
+        <h3 class="text-muted">Kilometraje recorrrido</h3>
+    </div>
+    <!-- Map and Side Panel -->
+    <div class="row content">
+        <!-- Google Map -->
+        <div class="col-md-7">
+            <div id="map" style="width:645px; height:645px"></div>
+        </div>
+        <!-- Side Panel -- Now Handled by ng-view -->
+        <div ng-view></div>
+    </div>
+    <hr/>
+    <!-- Footer -->
+    <div class="footer">
+        <p class="text-center"><span class="glyphicon glyphicon-check"></span> By Vudu Apps -
+            <!--a href="https://scotch.io/">App Tutorial</a> | <a href="https://github.com/afhaque/MeanMapAppV2.0">Github Repo</a--></p>
+    </div>
+</div>
+</body>
+</html>
