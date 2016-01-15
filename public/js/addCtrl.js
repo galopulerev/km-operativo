@@ -11,14 +11,39 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
         $scope.positions = response;
     }).error(function(){});
 
+    var directionsRendererAtt = {
+        suppressMarkers: true,
+        suppressInfoWindows: true
+    };
+
     $scope.calculateDistance = function() {
+        if(!gservice.directionsService){
+            gservice.directionsService = new google.maps.DirectionsService;
+        }
+
+        if(!gservice.directionsDisplay){
+            gservice.directionsDisplay = new google.maps.DirectionsRenderer(directionsRendererAtt);
+        }
+        if(!gservice.directionsDisplay2){
+            gservice.directionsDisplay2 = new google.maps.DirectionsRenderer(directionsRendererAtt);
+        }
+        if(!gservice.directionsDisplay3){
+            gservice.directionsDisplay3 = new google.maps.DirectionsRenderer(directionsRendererAtt);
+        }
+        if(!gservice.directionsDisplay4){
+            gservice.directionsDisplay4 = new google.maps.DirectionsRenderer(directionsRendererAtt);
+        }
+        gservice.directionsDisplay.setMap(gservice.map);
+        gservice.directionsDisplay2.setMap(gservice.map);
+        gservice.directionsDisplay3.setMap(gservice.map);
+        gservice.directionsDisplay4.setMap(gservice.map);
         //gservice.refresh(-0.146, -78.488, true);
-        calculateAndDisplayRoute(gservice.directionsService, gservice.directionsDisplay, $scope);
+        calculateAndDisplayRoute($scope);
         //$scope.positions[0].distance = distances[0];
         //$scope.positions[0].distance = distance;
     }
 
-    var calculateAndDisplayRoute = function(directionsService, directionsDisplay, scope) {
+    var calculateAndDisplayRoute = function(scope) {
         
         //var distances = [];
         var waypts;
@@ -31,6 +56,7 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
         var legscont = 0;
         var tableIndex = 1;
         var laps = Math.floor(gservice.locations.length / maxwp);
+        var dircont = 0;
         console.log("laps: " + laps);
 
         for (var icont = 0; icont < laps; icont++) {
@@ -56,27 +82,37 @@ addCtrl.controller('addCtrl', function($scope, $http, $rootScope, geolocation, g
                 console.log(waypts);
             }
             
-            directionsService.route({
+            gservice.directionsService.route({
                 origin: gservice.locations[i].latlon,
                 destination: gservice.locations[j].latlon,
                 waypoints: waypts,
                 optimizeWaypoints: true,
                 travelMode: google.maps.TravelMode.DRIVING
-            }, function(response, status) {
+            }, function(response, status) { 
                 if (status === google.maps.DirectionsStatus.OK) {
-                    directionsDisplay.setDirections(response);
+                    if (dircont < 1) {
+                        gservice.directionsDisplay.setDirections(response);
+                    } else if ((dircont < 2)) {
+                        gservice.directionsDisplay2.setDirections(response);
+                    } else if ((dircont < 3)){
+                        gservice.directionsDisplay3.setDirections(response);
+                    } else {
+                        gservice.directionsDisplay4.setDirections(response);
+                    }
+
                     var route = response.routes[0];
                     //distances.push(route.legs[0].distance.text);
                     legscont = 0;
                     while (legscont < maxleg) {
                         if (route.legs[legscont]) {
-                            scope.positions[tableIndex].distance = route.legs[legscont].distance.text;
+                            scope.positions[tableIndex].distance = route.legs[legscont].distance.value + " m";
                         }
                         legscont++;
                         tableIndex++;
                     }
                     
                     scope.$apply();
+                    dircont++;
                     //window.alert(route.legs[1].distance.value);
                 } else {
                     window.alert('Directions request failed due to ' + status);

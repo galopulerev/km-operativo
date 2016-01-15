@@ -77,26 +77,29 @@ angular.module('gservice', [])
 
         // Uses the selected lat, long as starting point
         var myLatLng = {lat: selectedLat, lng: selectedLong};
-        
+        /*
         if(!googleMapService.directionsService){
             googleMapService.directionsService = new google.maps.DirectionsService;
         }
 
         if(!googleMapService.directionsDisplay){
-            googleMapService.directionsDisplay = new google.maps.DirectionsRenderer;
+            googleMapService.directionsDisplay = new google.maps.DirectionsRenderer({
+                suppressMarkers: true,
+                suppressInfoWindows: true
+            });
         }
-        
+        */
         // If map has not been created...
-        if (!map){
+        if (!googleMapService.map){
 
             // Create a new map and place in the index.html page
-            var map = new google.maps.Map(document.getElementById('map'), {
+            googleMapService.map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 12,
                 center: myLatLng
             });
         }
 
-        googleMapService.directionsDisplay.setMap(map);
+        //googleMapService.directionsDisplay.setMap(map);
 
         // If a filter was used set the icons yellow, otherwise blue
         //if(filter){
@@ -111,7 +114,7 @@ angular.module('gservice', [])
         googleMapService.locations.forEach(function(n, i){
             var marker = new google.maps.Marker({
                 position: n.latlon,
-                map: map,
+                map: googleMapService.map,
                 title: "Big Map",
                 icon: icon,
             });
@@ -121,7 +124,7 @@ angular.module('gservice', [])
 
                 // When clicked, open the selected marker's message
                 currentSelectedMarker = n;
-                n.message.open(map, marker);
+                n.message.open(googleMapService.map, marker);
             });
         });
         /*
